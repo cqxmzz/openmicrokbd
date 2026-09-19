@@ -1,0 +1,1 @@
+initial-command = /bin/zsh -lc 'rm -f /tmp/herdr-remote.sock; x2ssh -et_reverse_tunnel 47600:47600 -et <your-devserver> -t /tmp/herdr-remote.sock:/home/<user>/.config/herdr/herdr.sock -c herdr'

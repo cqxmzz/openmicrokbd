@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.qimche.herdr-led</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/qimche/.config/openmicro/.venv/bin/python</string>
+        <string>/Users/qimche/.config/openmicro/herdr-led.py</string>
+    </array>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>HERDR_SOCK</key>
+        <string>/tmp/herdr-remote.sock</string>
+        <key>HERDR_BIN</key>
+        <string>/opt/homebrew/bin/herdr</string>
+        <key>POLL_MS</key>
+        <string>750</string>
+        <key>WORKSPACE_NUMBER</key>
+        <string>1</string>
+    </dict>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>ProcessType</key>
+    <string>Interactive</string>
+    <key>StandardOutPath</key>
+    <string>/Users/qimche/.config/openmicro/herdr-led.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/qimche/.config/openmicro/herdr-led.stderr.log</string>
+</dict>
+</plist>

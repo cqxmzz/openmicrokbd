@@ -1,0 +1,699 @@
+{
+  "_comment": "Fragments of ~/.config/karabiner/karabiner.json. Merge into profiles[].complex_modifications.rules and profiles[].devices.",
+  "rules": [
+    {
+      "description": "F13 (DZ60 PTT key) -> F18 so swptt-daemon can enforce the 800ms floor",
+      "manipulators": [
+        {
+          "from": {
+            "key_code": "f13",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "f18"
+            }
+          ],
+          "type": "basic"
+        }
+      ]
+    },
+    {
+      "description": "Volume keys -> volstep-daemon (international3/1; no shell_command on the hot path)",
+      "manipulators": [
+        {
+          "from": {
+            "key_code": "volume_increment",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "international3"
+            }
+          ],
+          "type": "basic"
+        },
+        {
+          "from": {
+            "key_code": "volume_decrement",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "international1"
+            }
+          ],
+          "type": "basic"
+        }
+      ]
+    },
+    {
+      "description": "OpenMicro rows 2/3 -> herdr workspace+tab (chords in Ghostty, CLI elsewhere)",
+      "manipulators": [
+        {
+          "conditions": [
+            {
+              "identifiers": [
+                {
+                  "product_id": 1,
+                  "vendor_id": 4617
+                }
+              ],
+              "type": "device_if"
+            },
+            {
+              "bundle_identifiers": [
+                "^com\\.mitchellh\\.ghostty$"
+              ],
+              "type": "frontmost_application_if"
+            }
+          ],
+          "from": {
+            "key_code": "f14",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "1",
+              "modifiers": [
+                "left_command",
+                "left_option"
+              ]
+            },
+            {
+              "key_code": "1",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "type": "basic"
+        },
+        {
+          "conditions": [
+            {
+              "identifiers": [
+                {
+                  "product_id": 1,
+                  "vendor_id": 4617
+                }
+              ],
+              "type": "device_if"
+            },
+            {
+              "bundle_identifiers": [
+                "^com\\.mitchellh\\.ghostty$"
+              ],
+              "type": "frontmost_application_unless"
+            }
+          ],
+          "from": {
+            "key_code": "f14",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "shell_command": "/Users/qimche/.config/openmicro/herdr-focus.sh 1 1"
+            }
+          ],
+          "type": "basic"
+        },
+        {
+          "conditions": [
+            {
+              "identifiers": [
+                {
+                  "product_id": 1,
+                  "vendor_id": 4617
+                }
+              ],
+              "type": "device_if"
+            },
+            {
+              "bundle_identifiers": [
+                "^com\\.mitchellh\\.ghostty$"
+              ],
+              "type": "frontmost_application_if"
+            }
+          ],
+          "from": {
+            "key_code": "f15",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "1",
+              "modifiers": [
+                "left_command",
+                "left_option"
+              ]
+            },
+            {
+              "key_code": "2",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "type": "basic"
+        },
+        {
+          "conditions": [
+            {
+              "identifiers": [
+                {
+                  "product_id": 1,
+                  "vendor_id": 4617
+                }
+              ],
+              "type": "device_if"
+            },
+            {
+              "bundle_identifiers": [
+                "^com\\.mitchellh\\.ghostty$"
+              ],
+              "type": "frontmost_application_unless"
+            }
+          ],
+          "from": {
+            "key_code": "f15",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "shell_command": "/Users/qimche/.config/openmicro/herdr-focus.sh 2 1"
+            }
+          ],
+          "type": "basic"
+        },
+        {
+          "conditions": [
+            {
+              "identifiers": [
+                {
+                  "product_id": 1,
+                  "vendor_id": 4617
+                }
+              ],
+              "type": "device_if"
+            },
+            {
+              "bundle_identifiers": [
+                "^com\\.mitchellh\\.ghostty$"
+              ],
+              "type": "frontmost_application_if"
+            }
+          ],
+          "from": {
+            "key_code": "f16",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "1",
+              "modifiers": [
+                "left_command",
+                "left_option"
+              ]
+            },
+            {
+              "key_code": "3",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "type": "basic"
+        },
+        {
+          "conditions": [
+            {
+              "identifiers": [
+                {
+                  "product_id": 1,
+                  "vendor_id": 4617
+                }
+              ],
+              "type": "device_if"
+            },
+            {
+              "bundle_identifiers": [
+                "^com\\.mitchellh\\.ghostty$"
+              ],
+              "type": "frontmost_application_unless"
+            }
+          ],
+          "from": {
+            "key_code": "f16",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "shell_command": "/Users/qimche/.config/openmicro/herdr-focus.sh 3 1"
+            }
+          ],
+          "type": "basic"
+        },
+        {
+          "conditions": [
+            {
+              "identifiers": [
+                {
+                  "product_id": 1,
+                  "vendor_id": 4617
+                }
+              ],
+              "type": "device_if"
+            },
+            {
+              "bundle_identifiers": [
+                "^com\\.mitchellh\\.ghostty$"
+              ],
+              "type": "frontmost_application_if"
+            }
+          ],
+          "from": {
+            "key_code": "f17",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "1",
+              "modifiers": [
+                "left_command",
+                "left_option"
+              ]
+            },
+            {
+              "key_code": "4",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "type": "basic"
+        },
+        {
+          "conditions": [
+            {
+              "identifiers": [
+                {
+                  "product_id": 1,
+                  "vendor_id": 4617
+                }
+              ],
+              "type": "device_if"
+            },
+            {
+              "bundle_identifiers": [
+                "^com\\.mitchellh\\.ghostty$"
+              ],
+              "type": "frontmost_application_unless"
+            }
+          ],
+          "from": {
+            "key_code": "f17",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "shell_command": "/Users/qimche/.config/openmicro/herdr-focus.sh 4 1"
+            }
+          ],
+          "type": "basic"
+        },
+        {
+          "conditions": [
+            {
+              "identifiers": [
+                {
+                  "product_id": 1,
+                  "vendor_id": 4617
+                }
+              ],
+              "type": "device_if"
+            },
+            {
+              "bundle_identifiers": [
+                "^com\\.mitchellh\\.ghostty$"
+              ],
+              "type": "frontmost_application_if"
+            }
+          ],
+          "from": {
+            "key_code": "f19",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "2",
+              "modifiers": [
+                "left_command",
+                "left_option"
+              ]
+            },
+            {
+              "key_code": "1",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "type": "basic"
+        },
+        {
+          "conditions": [
+            {
+              "identifiers": [
+                {
+                  "product_id": 1,
+                  "vendor_id": 4617
+                }
+              ],
+              "type": "device_if"
+            },
+            {
+              "bundle_identifiers": [
+                "^com\\.mitchellh\\.ghostty$"
+              ],
+              "type": "frontmost_application_unless"
+            }
+          ],
+          "from": {
+            "key_code": "f19",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "shell_command": "/Users/qimche/.config/openmicro/herdr-focus.sh 1 2"
+            }
+          ],
+          "type": "basic"
+        },
+        {
+          "conditions": [
+            {
+              "identifiers": [
+                {
+                  "product_id": 1,
+                  "vendor_id": 4617
+                }
+              ],
+              "type": "device_if"
+            },
+            {
+              "bundle_identifiers": [
+                "^com\\.mitchellh\\.ghostty$"
+              ],
+              "type": "frontmost_application_if"
+            }
+          ],
+          "from": {
+            "key_code": "f20",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "2",
+              "modifiers": [
+                "left_command",
+                "left_option"
+              ]
+            },
+            {
+              "key_code": "2",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "type": "basic"
+        },
+        {
+          "conditions": [
+            {
+              "identifiers": [
+                {
+                  "product_id": 1,
+                  "vendor_id": 4617
+                }
+              ],
+              "type": "device_if"
+            },
+            {
+              "bundle_identifiers": [
+                "^com\\.mitchellh\\.ghostty$"
+              ],
+              "type": "frontmost_application_unless"
+            }
+          ],
+          "from": {
+            "key_code": "f20",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "shell_command": "/Users/qimche/.config/openmicro/herdr-focus.sh 2 2"
+            }
+          ],
+          "type": "basic"
+        }
+      ]
+    },
+    {
+      "description": "OpenMicro p11/p12 -> Ghostty + cmd-shift-b / cmd-b",
+      "manipulators": [
+        {
+          "conditions": [
+            {
+              "identifiers": [
+                {
+                  "product_id": 1,
+                  "vendor_id": 4617
+                }
+              ],
+              "type": "device_if"
+            },
+            {
+              "bundle_identifiers": [
+                "^com\\.mitchellh\\.ghostty$"
+              ],
+              "type": "frontmost_application_if"
+            }
+          ],
+          "from": {
+            "key_code": "international4",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "b",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "type": "basic"
+        },
+        {
+          "conditions": [
+            {
+              "identifiers": [
+                {
+                  "product_id": 1,
+                  "vendor_id": 4617
+                }
+              ],
+              "type": "device_if"
+            },
+            {
+              "bundle_identifiers": [
+                "^com\\.mitchellh\\.ghostty$"
+              ],
+              "type": "frontmost_application_unless"
+            }
+          ],
+          "from": {
+            "key_code": "international4",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "shell_command": "open -a Ghostty"
+            },
+            {
+              "hold_down_milliseconds": 250,
+              "key_code": "vk_none"
+            },
+            {
+              "key_code": "b",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "type": "basic"
+        },
+        {
+          "conditions": [
+            {
+              "identifiers": [
+                {
+                  "product_id": 1,
+                  "vendor_id": 4617
+                }
+              ],
+              "type": "device_if"
+            },
+            {
+              "bundle_identifiers": [
+                "^com\\.mitchellh\\.ghostty$"
+              ],
+              "type": "frontmost_application_if"
+            }
+          ],
+          "from": {
+            "key_code": "international5",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "b",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "type": "basic"
+        },
+        {
+          "conditions": [
+            {
+              "identifiers": [
+                {
+                  "product_id": 1,
+                  "vendor_id": 4617
+                }
+              ],
+              "type": "device_if"
+            },
+            {
+              "bundle_identifiers": [
+                "^com\\.mitchellh\\.ghostty$"
+              ],
+              "type": "frontmost_application_unless"
+            }
+          ],
+          "from": {
+            "key_code": "international5",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "shell_command": "open -a Ghostty"
+            },
+            {
+              "hold_down_milliseconds": 250,
+              "key_code": "vk_none"
+            },
+            {
+              "key_code": "b",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "type": "basic"
+        }
+      ]
+    }
+  ],
+  "devices": [
+    {
+      "identifiers": {
+        "is_consumer": true,
+        "product_id": 1,
+        "vendor_id": 4617
+      },
+      "ignore": false
+    }
+  ]
+}
