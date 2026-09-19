@@ -122,6 +122,12 @@ type JoyYPin = peripherals::PB0;
 /// Underglow ring length: 2 per side on the current board, 4 per side on the
 /// prototype. The hue step derives from this — count x step must stay 256.
 #[cfg(not(feature = "proto"))]
+/// Key LEDs held dark, bit i = key position i. Rows are 0-1 / 2-5 / 6-9 /
+/// 10-12 (the app's `slot_name`), so 0x1F03 is all of row 1, the last two of
+/// row 3, and all of row 4. Row 2 stays lit -- the herdr status daemon drives
+/// it through the per-key override, which this mask would otherwise suppress.
+const KEY_LED_OFF_MASK: u16 = 0x1F03;
+
 const UG_LEN: usize = 8;
 #[cfg(feature = "proto")]
 const UG_LEN: usize = 16;
@@ -296,6 +302,15 @@ static KEY_LED_OVERRIDE_MASK: portable_atomic::AtomicU16 =
     portable_atomic::AtomicU16::new(0);
 static KEY_LED_OVERRIDE_RGB: [portable_atomic::AtomicU32; 13] =
     [const { portable_atomic::AtomicU32::new(0) }; 13];
+/// Millis at the last override write, for the staleness watchdog below.
+static KEY_LED_OVERRIDE_AT: portable_atomic::AtomicU32 =
+    portable_atomic::AtomicU32::new(0);
+/// An override is a claim about something happening *now* on the host. If the
+/// host stops refreshing it -- unplugged from the hub that still powers us,
+/// asleep, locked, the writer crashed -- the pad would otherwise hold that
+/// stale claim lit forever. Expire instead, so going dark is the failure mode.
+/// The host must re-assert more often than this; see herdr-led.py's heartbeat.
+const KEY_LED_OVERRIDE_TTL_MS: u32 = 5_000;
 
 #[derive(Clone, Copy)]
 struct KeyboardTransition {
@@ -1230,6 +1245,10 @@ async fn main(spawner: Spawner) {
                                         bit,
                                         core::sync::atomic::Ordering::Relaxed,
                                     );
+                                    KEY_LED_OVERRIDE_AT.store(
+                                        Instant::now().as_millis() as u32,
+                                        core::sync::atomic::Ordering::Relaxed,
+                                    );
                                 } else {
                                     KEY_LED_OVERRIDE_MASK.fetch_and(
                                         !bit,
@@ -1319,8 +1338,11 @@ const QUAD_LUT: [i8; 16] = [
      0, -1,  1,  0,
 ];
 
-/// Quadrature counts per detent — one full 4-state cycle on this EC11.
-const ENC_COUNTS_PER_DETENT: i8 = 4;
+/// Quadrature counts per detent. Upstream assumes one full 4-state cycle per
+/// detent; this unit's EC11 is a half-cycle part and only produces 2 counts
+/// per detent, so a 4 here swallows every other notch (measured: one event per
+/// two notches in the app's live input inspector).
+const ENC_COUNTS_PER_DETENT: i8 = 2;
 
 #[embassy_executor::task]
 async fn scan_task(
@@ -1939,8 +1961,17 @@ async fn led_task(mut led_key: ws2812::LedPin<'static>, mut led_ug: ws2812::LedP
         let bright = keymap::led_brightness() as u32;
         let dim = |base: u32| ((base * bright * bright) / (255 * 255)) as u8;
         let (key_pat, ug_pat) = keymap::led_patterns();
-        let override_mask =
+        let mut override_mask =
             KEY_LED_OVERRIDE_MASK.load(core::sync::atomic::Ordering::Relaxed);
+        if override_mask != 0 {
+            let at = KEY_LED_OVERRIDE_AT.load(core::sync::atomic::Ordering::Relaxed);
+            let age = (Instant::now().as_millis() as u32).wrapping_sub(at);
+            if age > KEY_LED_OVERRIDE_TTL_MS {
+                KEY_LED_OVERRIDE_MASK.store(0, core::sync::atomic::Ordering::Relaxed);
+                override_mask = 0;
+                info!("key LED overrides expired after {=u32} ms", age);
+            }
+        }
         // Codex mode: whatever lighting the host has described so far
         // outranks the pad's own patterns and the app's overrides.
         let host = if codex_mode() { Some(codex::lights()) } else { None };
@@ -1957,6 +1988,13 @@ async fn led_task(mut led_key: ws2812::LedPin<'static>, mut led_ug: ws2812::LedP
 
         let mut keys = [ws2812::Grb::default(); 13];
         for (i, px) in keys.iter_mut().enumerate() {
+            // Forced dark, ahead of every other source including the press
+            // flash. Idle lighting is per-chain in flash (one pattern for all
+            // 13 keys), so blanking individual positions has to live here.
+            if KEY_LED_OFF_MASK & (1 << i) != 0 {
+                *px = ws2812::Grb::default();
+                continue;
+            }
             // key_leds[i] sits under key position i's switch — chain order is
             // the sw index order in the .cohdl, and every position is
             // independent now (the 2U pair each has its own LED and bit).
